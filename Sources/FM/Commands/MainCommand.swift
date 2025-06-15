@@ -34,6 +34,9 @@ struct MainCommand: AsyncParsableCommand {
     @Flag(name: [.short, .long], help: "Run in interactive mode")
     var interactive: Bool = false
     
+    @Option(name: .long, help: "Comma-separated list of authorized MCP tool names. If not specified, all tools are authorized. Use empty string to disable all MCP tools.")
+    var authorizedTools: String?
+    
     @Argument(help: "The request to send to the model")
     var request: String?
     
@@ -58,8 +61,44 @@ struct MainCommand: AsyncParsableCommand {
     }
     
     private func loadTools() async -> [any FoundationModels.Tool] {
+        // Check if MCP tools should be disabled
+        if let authorizedTools = authorizedTools, authorizedTools.isEmpty {
+            logger.debug("MCP tools disabled via empty authorized-tools option")
+            return []
+        }
+        
         let toolService = ToolService()
-        return await toolService.loadTools()
+        let allTools = await toolService.loadTools()
+        
+        // Remove duplicates by name
+        let uniqueTools = removeDuplicateTools(from: allTools)
+        
+        // Filter tools if specific names are provided
+        if let authorizedTools = authorizedTools {
+            let authorizedNames = Set(authorizedTools.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) })
+            let filteredTools = uniqueTools.filter { authorizedNames.contains($0.name) }
+            logger.debug("Filtered to \(filteredTools.count) authorized tools from \(uniqueTools.count) available tools")
+            return filteredTools
+        }
+        
+        logger.debug("Using all \(uniqueTools.count) available tools")
+        return uniqueTools
+    }
+    
+    private func removeDuplicateTools(from tools: [any FoundationModels.Tool]) -> [any FoundationModels.Tool] {
+        var seenNames = Set<String>()
+        var uniqueTools: [any FoundationModels.Tool] = []
+        
+        for tool in tools {
+            if !seenNames.contains(tool.name) {
+                seenNames.insert(tool.name)
+                uniqueTools.append(tool)
+            } else {
+                logger.debug("Removing duplicate tool: \(tool.name)")
+            }
+        }
+        
+        return uniqueTools
     }
     
     private func createSession(with tools: [any FoundationModels.Tool]) -> LanguageModelSession {

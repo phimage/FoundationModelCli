@@ -153,7 +153,7 @@ struct MCPTool: FoundationModels.Tool {
                 if let resourceText = resourceText {
                     text += resourceText
                 } else {
-                    text += "[Resource: \(uri) (\(mimeType ?? "unknown"))]"
+                    text += "[Resource: \(uri) (\(mimeType))]"
                 }
             }
         }

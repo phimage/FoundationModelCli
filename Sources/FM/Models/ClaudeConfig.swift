@@ -61,6 +61,7 @@ struct ClaudeConfigService {
 
 // MARK: - Error Types
 
+/// Configuration-related errors that can occur when loading config files
 enum ConfigurationError: LocalizedError {
     case invalidConfigFile(Error)
     case configFileNotFound

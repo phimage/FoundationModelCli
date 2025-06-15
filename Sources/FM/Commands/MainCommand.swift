@@ -9,6 +9,7 @@ import Foundation
 import FoundationModels
 import ArgumentParser
 import Logging
+import MCPUtils
 
 /// Main command-line interface for the Foundation Model CLI
 @main
@@ -68,7 +69,7 @@ struct MainCommand: AsyncParsableCommand {
         }
         
         let toolService = ToolService()
-        let allTools = await toolService.loadTools()
+        let allTools = await toolService.loadTools(logger: logger).foundationModelsTools
         
         // Remove duplicates by name
         let uniqueTools = removeDuplicateTools(from: allTools)

@@ -68,33 +68,7 @@ FM CLI automatically loads MCP servers from your Claude Desktop configuration fi
 
 No additional configuration is required if you have Claude Desktop set up with MCP servers.
 
-## Architecture
-
-The project is organized into logical modules:
-
-```
-Sources/FM/
-├── Commands/           # Command-line interface and interactive session
-├── Models/            # Data models and configuration
-├── Services/          # Business logic and tool management
-└── Extensions/        # Utility extensions and global components
-```
-
-## Development
-
-### Project Structure
-
-- **Commands**: Main CLI entry point and interactive session handling
-- **Models**: Configuration models, MCP integration, and tool definitions
-- **Services**: Tool loading and management services
-- **Extensions**: Process extensions and shared utilities
-
-### Adding New Features
-
-1. Add new commands in `Commands/`
-2. Add data models in `Models/`
-3. Add business logic in `Services/`
-4. Add utilities in `Extensions/`
+Sample for VSCode configuration file.
 
 ## Contributing
 

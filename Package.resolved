@@ -1,5 +1,5 @@
 {
-  "originHash" : "3464bf1a22736208c5e7b23e834f01591409a56b5b23983a43a8facf91bea4e9",
+  "originHash" : "36c0212f066c1784395b15b9265e1648c1f8a9267508b2d054809dd3167074ed",
   "pins" : [
     {
       "identity" : "eventsource",
@@ -13,10 +13,10 @@
     {
       "identity" : "mcputils",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/phimage/mcputils.git",
+      "location" : "https://github.com/phimage/MCPUtils.git",
       "state" : {
-        "revision" : "519785943ecafdda4a83f941a63ed697652a3cf6",
-        "version" : "0.0.3"
+        "revision" : "8385a8d4a4c1a8ea38516ffff9578d31d7b62a85",
+        "version" : "0.0.4"
       }
     },
     {

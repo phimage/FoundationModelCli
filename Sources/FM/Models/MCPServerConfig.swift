@@ -58,13 +58,20 @@ struct MCPServerConfig: Codable {
     }
     
     private func loadToolsFromClient(_ client: Client) async throws -> [any FoundationModels.Tool] {
-        let (listedTools, nextCursor) = try await client.listTools()
+        var allTools: [MCP.Tool] = []
+        var cursor: String? = nil
         
-        // TODO: Handle pagination with nextCursor
-        if nextCursor != nil {
-            logger.warning("MCP server returned paginated results - some tools may be missing")
-        }
+        repeat {
+            let (listedTools, nextCursor) = try await client.listTools(cursor: cursor)
+            allTools.append(contentsOf: listedTools)
+            cursor = nextCursor
+            
+            if cursor != nil {
+                logger.debug("Fetching next page of tools with cursor: \(cursor!)")
+            }
+        } while cursor != nil
         
-        return listedTools.map { MCPTool($0, mcpClient: client) }
+        logger.debug("Loaded \(allTools.count) tools from MCP server")
+        return allTools.map { MCPTool($0, mcpClient: client) }
     }
 }
